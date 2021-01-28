@@ -1,0 +1,5 @@
+{
+  "FILE_DIRECTORY": "/file",
+  "LOG_DIRECTORY": "log.txt",
+  "DB_DIRECTORY": "data.db"
+}
