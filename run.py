@@ -1,6 +1,6 @@
-from sms.app import create_app
+from sms import create_app
 
-app = create_app()
+app = create_app("config.json")
 # Open webbrowser
 # os.system("python -m webbrowser \"http://localhost:5000/\"")
 
