@@ -1,7 +1,8 @@
 from flask import Flask, render_template
+from flask.json import jsonify
 
 from .database import db
-from .interface import api
+from .interface import api, ApiGeneralException
 
 def create_app(config:str=None) -> Flask:
     app = Flask(__name__)
@@ -20,5 +21,17 @@ def create_app(config:str=None) -> Flask:
 
     # initiallize api
     api.init_app(app)
+
+    # Error handlers
+    @app.errorhandler(ApiGeneralException)
+    def general_error_handler(e) -> str:
+        if e.code == 500:
+            db.session.rollback()
+        return jsonify(e.to_dict()), e.code
+
+    # Routes
+    @app.route('/')
+    def index():
+        return render_template("index.html")
 
     return app
