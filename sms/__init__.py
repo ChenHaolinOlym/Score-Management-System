@@ -1,14 +1,20 @@
 from flask import Flask, render_template
 from flask.json import jsonify
+import logging
 
+from .logger import init_logger
 from .database import db
 from .interface import api, ApiGeneralException
 
 def create_app(config:str=None) -> Flask:
     app = Flask(__name__)
-    
+
+    # Load configs
     if config:
         app.config.from_json(config)
+    # TODO: Reaction if no config
+    init_logger(app)
+
     
     # Sqlalchemy Configs
     # TODO: Check info in config and tehn add flask config
