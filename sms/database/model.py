@@ -36,8 +36,8 @@ class Groups(db.Model):
     id = db.Column(db.Integer, primary_key=True, unique=True, nullable=False, autoincrement=True)
     name = db.Column(db.Text, nullable=False)
     # Relationships
-    parts = db.relationship("parts", backref="group", lazy=True)
-    pieces = db.relationship("pieces", secondary=groups_pieces, lazy="subquery", backref=db.backref("groups", lazy=True))
+    parts = db.relationship("Parts", backref="group", lazy=True)
+    pieces = db.relationship("Pieces", secondary=groups_pieces, lazy="subquery", backref=db.backref("groups", lazy=True))
     
     def __repr__(self) -> str:
         return str({
@@ -54,7 +54,7 @@ class Parts(db.Model):
     # Foreign Keys
     group_id = db.Column(db.Integer, db.ForeignKey('groups.id'), nullable=False)
     # Relationships
-    instruments = db.relationship("instruments", backref="part", lazy=True)
+    instruments = db.relationship("Instruments", backref="part", lazy=True)
     
     def __repr__(self) -> str:
         return str({
@@ -71,8 +71,8 @@ class Instruments(db.Model):
     # Foreign Keys
     part_id = db.Column(db.Integer, db.ForeignKey("parts.id"), nullable=False)
     # Relationships
-    versions = db.relationship('versions', secondary=instruments_versions, lazy='subquery', backref=db.backref('instruments', lazy=True))
-    files = db.relationship('files', secondary=instruments_files, lazy='subquery', backref=db.backref('instruments', lazy=True))
+    versions = db.relationship('Versions', secondary=instruments_versions, lazy='subquery', backref=db.backref('instruments', lazy=True))
+    files = db.relationship('Files', secondary=instruments_files, lazy='subquery', backref=db.backref('instruments', lazy=True))
 
     def __repr__(self) -> str:
         return str({
@@ -95,7 +95,7 @@ class Pieces(db.Model):
     modified_time = db.Column(db.DateTime, default=datetime.datetime.now(), onupdate=datetime.datetime.now())
     # Relationships
     # groups_pieces many-to-many
-    versions = db.relationship("versions", backref="pieces", lazy=True)
+    versions = db.relationship("Versions", backref="pieces", lazy=True)
 
     def __repr__(self) -> str:
         return str({
@@ -118,8 +118,8 @@ class Versions(db.Model):
     piece_id = db.Column(db.Integer, db.ForeignKey("pieces.id"), nullable=False)
     # Relationships
     # instruments_versions many-to-many
-    files = db.relationship('files', secondary=versions_files, lazy='subquery', backref=db.backref('versions', lazy=True))
-    transposes = db.relationship("transposes", backref="versions", lazy=True)
+    files = db.relationship('Files', secondary=versions_files, lazy='subquery', backref=db.backref('versions', lazy=True))
+    transposes = db.relationship("Transposes", backref="versions", lazy=True)
 
     def __repr__(self) -> str:
         return str({
