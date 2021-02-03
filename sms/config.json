@@ -1,10 +1,14 @@
 {
-  "FILE_DIRECTORY": "/file",
-  "DB_DIRECTORY": "data.db",
   "LOG": {
     "FILE": "sms.log",
     "LEVEL": "DEBUG",
     "MAXBYTES": 1048576,
     "BACKUPCOUNT": 1
+  },
+  "DB": {
+    "FILE": "data.db"
+  },
+  "FILES": {
+    "DIR": "/file"
   }
 }

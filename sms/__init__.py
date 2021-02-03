@@ -1,9 +1,9 @@
 from flask import Flask, render_template
 from flask.json import jsonify
-import logging
+import os
 
 from .logger import init_logger
-from .database import db
+from .database import db, create_everything
 from .interface import api, ApiGeneralException
 
 def create_app(config:str=None) -> Flask:
@@ -13,17 +13,20 @@ def create_app(config:str=None) -> Flask:
     if config:
         app.config.from_json(config)
     # TODO: Reaction if no config
-    init_logger(app)
 
-    
     # Sqlalchemy Configs
-    # TODO: Check info in config and tehn add flask config
-    app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{app.config['DB_DIRECTORY']}"
+    app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{app.config['DB']['FILE']}"
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+    # initiallize logger
+    init_logger(app)
 
     # initiallize database
     db.init_app(app)
-    # TODO: Check whether db exists, if not, print a warning and create a new one here
+
+    # Check whether database exists or not
+    if not os.path.exists(os.path.join("sms", app.config['DB']['FILE'])):
+        create_everything(app, db)
 
     # initiallize api
     api.init_app(app)
