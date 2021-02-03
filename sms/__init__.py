@@ -3,7 +3,7 @@ from flask.json import jsonify
 import os
 
 from .logger import init_logger
-from .database import db, create_everything
+from .database import db, ma, create_everything
 from .interface import api, ApiGeneralException
 
 def create_app(config:str=None) -> Flask:
@@ -23,6 +23,9 @@ def create_app(config:str=None) -> Flask:
 
     # initiallize database
     db.init_app(app)
+
+    # initiallize marshmallow(serialization tool)
+    ma.init_app(app)
 
     # Check whether database exists or not
     if not os.path.exists(os.path.join("sms", app.config['DB']['FILE'])):
