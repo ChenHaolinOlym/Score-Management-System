@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import current_app
 from flask_sqlalchemy import SQLAlchemy
 import logging
 from .model import (
@@ -7,9 +7,9 @@ from .model import (
     Instruments
 )
 
-def create_everything(app:Flask, db:SQLAlchemy) -> None:
+def create_everything(db:SQLAlchemy) -> None:
     logger = logging.getLogger(__name__)
-    with app.app_context():
+    with current_app.app_context():
         # Create database with model
         db.create_all()
         group = Groups(name="name")

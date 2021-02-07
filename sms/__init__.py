@@ -29,7 +29,8 @@ def create_app(config:str=None) -> Flask:
 
     # Check whether database exists or not
     if not os.path.exists(os.path.join("sms", app.config['DB']['FILE'])):
-        create_everything(app, db)
+        app.app_context().push()
+        create_everything(db)
 
     # initiallize api
     api.init_app(app)
