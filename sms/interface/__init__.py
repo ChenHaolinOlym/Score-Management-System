@@ -1,32 +1,47 @@
-from flask_restful import Api as OriginalApi
 from werkzeug.exceptions import HTTPException
 
-# Extend original Api class to enable customize exceptions
-class Api(OriginalApi):
-    def error_router(self, original_handler, e):
-        if self._has_fr_route() or isinstance(e, HTTPException):
-            try:
-                return self.handle_error(e)
-            except Exception:
-                pass  # Fall through to original handler
-        return original_handler(e)
-
-class ApiGeneralException(Exception):
-    def __init__(self, message:str, code:int=500) -> None:
-        Exception.__init__(self)
-        self.status = False
-        self.message = message
-        self.code = code
-
-    def to_dict(self) -> dict:
-        return {
-            "success": self.status,
-            "code": self.code,
-            "data": {},
-            "message": self.message
-        }
-
-
-
+from .extend import Api, ApiGeneralException
+from .schema import ma
+from .restful import (
+    GroupsApi,
+    GroupApi,
+    PartsApi,
+    PartApi,
+    InstrumentsApi,
+    InstrumentApi,
+    PiecesApi,
+    PieceApi,
+    VersionsApi,
+    VersionApi,
+    TransposesApi,
+    TransposeApi,
+    FilesApi,
+    FileApi,
+    DownloadApi
+)
 
 api = Api()
+
+# add resources
+api.add_resource(GroupsApi, "/api/groups", endpoint="groups_api")
+api.add_resource(GroupApi, "/api/group/<id>", endpoint="group_api")
+
+api.add_resource(PartsApi, "/api/parts", endpoint="parts_api")
+api.add_resource(PartApi, "/api/part/<id>", endpoint="part_api")
+
+api.add_resource(InstrumentsApi, "/api/instruments", endpoint="instruments_api")
+api.add_resource(InstrumentApi, "/api/instrument/<id>", endpoint="instrument_api")
+
+api.add_resource(PiecesApi, "/api/pieces", endpoint="pieces_api")
+api.add_resource(PieceApi, "/api/piece/<id>", endpoint="piece_api")
+
+api.add_resource(VersionsApi, "/api/versions", endpoint="versions_api")
+api.add_resource(VersionApi, "/api/version/<id>", endpoint="version_api")
+
+api.add_resource(TransposesApi, "/api/transposes", endpoint="transposes_api")
+api.add_resource(TransposeApi, "/api/transpose/<id>", endpoint="transpose_api")
+
+api.add_resource(FilesApi, "/api/files", endpoint="files_api")
+api.add_resource(FileApi, "/api/file/<id>", endpoint="file_api")
+
+api.add_resource(DownloadApi, "/download/<id>")

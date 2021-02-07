@@ -9,6 +9,6 @@
     "FILE": "data.db"
   },
   "FILES": {
-    "DIR": "/file"
+    "DIR": "file"
   }
 }

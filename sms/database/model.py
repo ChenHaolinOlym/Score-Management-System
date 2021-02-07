@@ -3,6 +3,8 @@ import datetime
 
 db = SQLAlchemy()
 
+# TODO: Encapsulate models into a class
+
 # Model part
 # Middle tables
 # Groups & Pieces

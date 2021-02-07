@@ -3,8 +3,8 @@ from flask.json import jsonify
 import os
 
 from .logger import init_logger
-from .database import db, ma, create_everything
-from .interface import api, ApiGeneralException
+from .database import db, create_everything
+from .interface import ma, api, ApiGeneralException
 
 def create_app(config:str=None) -> Flask:
     app = Flask(__name__)
