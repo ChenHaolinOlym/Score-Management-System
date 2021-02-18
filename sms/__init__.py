@@ -1,10 +1,9 @@
-from flask import Flask, render_template
-from flask.json import jsonify
+from flask import Flask, render_template, jsonify
 import os
 
 from .logger import init_logger
 from .database import db, create_everything
-from .interface import ma, api, ApiGeneralException
+from .interface import ma, api, register_bluprints
 
 def create_app(config:str=None) -> Flask:
     app = Flask(__name__)
@@ -12,11 +11,17 @@ def create_app(config:str=None) -> Flask:
     # Load configs
     if config:
         app.config.from_json(config)
+    # TODO: Add something to check whether a file folder is a file folder
     # TODO: Reaction if no config
 
     # Sqlalchemy Configs
     app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{app.config['DB']['FILE']}"
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+    # api configs
+    app.config['API_TITLE'] = 'SMS API'
+    app.config['API_VERSION'] = 'v1'
+    app.config['OPENAPI_VERSION'] = '3.0.2'
 
     # initiallize logger
     init_logger(app)
@@ -24,7 +29,7 @@ def create_app(config:str=None) -> Flask:
     # initiallize database
     db.init_app(app)
 
-    # initiallize marshmallow(serialization tool)
+    # initiallize Marshmallow
     ma.init_app(app)
 
     # Check whether database exists or not
@@ -34,9 +39,11 @@ def create_app(config:str=None) -> Flask:
 
     # initiallize api
     api.init_app(app)
+    register_bluprints()
 
     # Error handlers
-    @app.errorhandler(ApiGeneralException)
+    # TODO: Modify here
+    # @app.errorhandler(ApiGeneralException)
     def general_error_handler(e) -> str:
         if e.code == 500:
             db.session.rollback()

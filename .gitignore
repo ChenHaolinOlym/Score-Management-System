@@ -133,3 +133,6 @@ dmypy.json
 
 # database files
 *.db
+
+# files folder
+files/

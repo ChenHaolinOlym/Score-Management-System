@@ -4,7 +4,6 @@ from .model import (
     Parts,
     Instruments,
     Pieces,
-    Versions,
     Transposes,
     Files
 )
